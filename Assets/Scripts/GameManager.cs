@@ -8,21 +8,31 @@ using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
-    [SerializeField] private List<GameObject> targets;
+    #region Internal
 
-    private readonly float _spawnRate = 1f;
+    [SerializeField] private List<GameObject> targets;
+    private float _spawnRate = 1f;
     private int _score;
 
     public bool isGameActive;
-    public TextMeshProUGUI scoreText;
-    public TextMeshProUGUI gameOverText;
-    public Button restartButton;
 
-    private void Start()
+    #endregion
+
+    #region UI
+
+    public TextMeshProUGUI scoreText;
+    public GameObject titleScreen;
+    public GameObject gameOverScreen;
+
+    #endregion
+
+    public void StartGame(Difficulty difficulty)
     {
+        _spawnRate /= (float)difficulty;
+        UpdateScore(0);
         isGameActive = true;
         StartCoroutine(SpawnTarget());
-        UpdateScore(0);
+        titleScreen.SetActive(false);
     }
 
     private IEnumerator SpawnTarget()
@@ -43,8 +53,7 @@ public class GameManager : MonoBehaviour
 
     public void GameOver()
     {
-        gameOverText.gameObject.SetActive(true);
-        restartButton.gameObject.SetActive(true);
+        gameOverScreen.SetActive(true);
         isGameActive = false;
     }
 
